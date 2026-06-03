@@ -9,15 +9,6 @@ import (
 	"local-csi-driver/internal/pkg/block"
 )
 
-// EphemeralDiskFilter is a filter for ephemeral disks.
-var EphemeralDiskFilter = &Filter{
-	Filters: []FilterPredicate{
-		&PathFilter{Path: "/dev/nvme"},
-		NewModelFilter("Microsoft NVMe Direct Disk", "Microsoft NVMe Direct Disk v2"),
-		&TypeFilter{Type: "disk"},
-	},
-}
-
 // FilterPredicate defines a predicate for filtering devices.
 type FilterPredicate interface {
 	Match(device block.Device) bool

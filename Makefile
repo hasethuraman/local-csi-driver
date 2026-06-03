@@ -205,6 +205,10 @@ build: build-driver build-manager ## Build driver and manager binaries.
 build-driver: fmt fix vet ## Build driver binary.
 	go build -ldflags "$(LDFLAGS)" -o bin/local-csi-driver cmd/driver/main.go
 
+.PHONY: build-driver-manageddisk
+build-driver-manageddisk: fmt fix vet ## Build driver binary with managed disk filter for scale testing.
+	go build -tags manageddisk -ldflags "$(LDFLAGS)" -o bin/local-csi-driver-manageddisk cmd/driver/main.go
+
 .PHONY: build-manager
 build-manager: fmt fix vet ## Build manager binary.
 	go build -ldflags "$(LDFLAGS)" -o bin/local-csi-manager cmd/manager/main.go

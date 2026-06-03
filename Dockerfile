@@ -41,10 +41,14 @@ ARG LDFLAGS="\
     -X local-csi-driver/internal/pkg/version.buildDate=${BUILD_DATE} \
     -X local-csi-driver/internal/pkg/version.buildId=${BUILD_ID}"
 
+# GO_BUILD_TAGS allows injecting build tags at image build time.
+# Use --build-arg GO_BUILD_TAGS=manageddisk to build with managed disk support.
+ARG GO_BUILD_TAGS=""
+
 # CGO_ENABLED=1 is required to build the driver with FIPS support.
 RUN --mount=type=cache,target=/go/pkg/mod \
     --mount=type=cache,target=/root/.cache/go-build \
-    CGO_ENABLED=1 GOEXPERIMENT=systemcrypto GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -v -ldflags "${LDFLAGS}" -o local-csi-driver cmd/driver/main.go
+    CGO_ENABLED=1 GOEXPERIMENT=systemcrypto GOOS=${TARGETOS:-linux} GOARCH=${TARGETARCH} go build -v -tags "${GO_BUILD_TAGS}" -ldflags "${LDFLAGS}" -o local-csi-driver cmd/driver/main.go
 
 
 # Generate NOTICE.txt from dependency licenses. Built in parallel with `builder`.
